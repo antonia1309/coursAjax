@@ -3,9 +3,9 @@
   const nbPage = document.getElementById ("numberPageUsers").value;
   getUsers(nbPage);
 }*/
+//GET pr recup des données et POST c pr créer, PUT c pr modif et DELETE pr supp
 
 // la méthode GET pour RECCUPERER LES DONNEES
-
  // loader : copier code sur le site pure css loaders
 const loader ='<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
   // Appel Ajax et on continue
@@ -16,7 +16,7 @@ function getUsers (numeroPage){
   const url = 'https://reqres.in/api/users?delay=1&page='+numeroPage;
   
   /*permet de recup les info */
-  xhr.open('GET', url);//GET pr recup des données et POST c pr créer, PUT c pr modif et DELETE pr supp
+  xhr.open('GET', url);
 
   /*la valeur 4 correspond à l'état DONE:que c fini - 200 succès de la requête-voir cours pr les codes*/
   xhr.addEventListener('readystatechange', function() {
@@ -71,16 +71,17 @@ document.addEventListener("DOMContentLoaded",function(){ /* L appel de la focnti
 })
 
 
-// la méthode POST POUR POUVOIR CREER DES DONNEES /code copier ds le cours
-function createUserApiFetch (){
+// la méthode POST POUR POUVOIR CREER/AJOUT DES DONNEES /code copier ds le cours
+function createUserApiFetch(){
   const headers = new Headers();
   headers.append("Content-Type","application/json");
   
   const body = JSON.stringify({
-      name: 'David',
-      job: 'developpeur',
+      name: document.getElementById("Nom").value, 
+      job: document.getElementById("Job").value,
   }); //JSON.stringify pour convertir en objet JSON et éviter le risque des caractères spéciaux.
-  
+  /*voir sur le site de l api les info qu on p rajouter type nom et job et la reponse statut 201 ds console c q c pr ok , voir q le body est en format json 
+  donc on ajoute le const body*/
   const init = { 
       method: 'POST',
       headers: headers,
@@ -91,8 +92,62 @@ function createUserApiFetch (){
     return response.json();
     })
     .then(response => {
+    alert(response)
     console.log(response)
     })
     .catch(error => alert("Erreur : " + error));
 }
     
+//pour SUPPRIMER un utilisateur
+function deleteUser(){
+  const headers = new Headers();
+  
+  /*ici pr le delete il n y a pas de body sur le site de l api donc pas de const body */
+  /*voir aussi sur le site dans demande le lien necessaire ici on doit mettre un num /2*/
+  /*statut demande ds console si status 204 c q c ok */
+  const init = { 
+      method: 'DELETE',
+      headers: headers,
+      };
+  
+  fetch('https://reqres.in/api/users/2', init) /*le /2 trouver sur le site api ds demande*/
+    /*on enlève le json car il envoie le resultat en json pas besoin */
+    .then(response => {
+      if (response.status == 204){
+        alert ("L'utilisateur a bien été supprimé")
+      }
+      else{
+        alert ("Impossible de supprimer l'utilisateur")
+      }
+      alert(response)
+      console.log(response)
+    })
+    .catch(error => alert("Erreur : " + error));
+}
+
+// PUT pour pouvoir mettre jour ou modifier les données
+function editUser(){
+  const headers = new Headers();
+  headers.append("Content-Type","application/json");
+  
+  const body = JSON.stringify({
+      name: document.getElementById("Nom").value, 
+      job: document.getElementById("Job").value,
+  }); 
+  /*voir sur le site de l api les info qu on p rajouter type nom et job et la reponse statut 200 ds console c q c pr ok , voir q le body est en format json 
+  donc on ajoute le const body*/
+  const init = { 
+      method: 'PUT',
+      headers: headers,
+      body: body };
+  
+  fetch('https://reqres.in/api/users/2', init)
+    .then(response => {
+    return response.json();
+    })
+    .then(response => {
+    alert(response)
+    console.log(response)
+    })
+    .catch(error => alert("Erreur : " + error));
+}

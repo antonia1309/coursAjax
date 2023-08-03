@@ -1,10 +1,9 @@
 body{
-  background-color: red;
-  color: black;
+  background-color: black;
+  color: whitesmoke;
 }
 h1{
   text-align: center;
-  
 }
 .users-container{
   display: flex;
